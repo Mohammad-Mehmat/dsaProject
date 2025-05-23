@@ -64,51 +64,138 @@ int main() {
         displayMenu();
         scanf("%d", &choice);
 
-        switch(choice) {
-            case 1:
-                // addTask(&taskList);
-                break;
-            case 2:
-                 addUser(&userList);
-                break;
-            case 3:
-                // addResource(&resourceList);
-                break;
-            case 4:
-                // assignTaskToUser(&taskList, &userList);
-                break;
-            case 5:
-                // setTaskDependency(&taskList);
-                break;
-            case 6:
-                // allocateResourceToTask(&taskList, &resourceList);
-                break;
-            case 7:
-                // viewAllTasks(&taskList);
-                break;
-            case 8:
-                viewUsers(&userList);
-                break;
-            case 9:
-                // viewAllResources(&resourceList);
-                break;
-            case 10:
-                // saveDataToFile(&taskList, &userList, &resourceList);
-                break;
-            case 11:
-                // loadDataFromFile(&taskList, &userList, &resourceList);
-                break;
-            case 0:
-                setColor(10);
-                printf("\n\t\t\t\tExiting... Thank you!\n");
-                setColor(7);
-                break;
-            default:
-                setColor(12); // Red
-                printf("\t\t\t\tInvalid choice! Please try again.\n");
-                setColor(7);
-                Sleep(1000);
+        switch (choice) {
+    case 1: {
+        int id, priority;
+        char name[100], deadline[11];
+        printf("Enter Task ID: ");
+        scanf("%d", &id);
+        printf("Enter Task Name: ");
+        scanf(" %[^\n]", name);
+        printf("Enter Priority (1-10): ");
+        scanf("%d", &priority);
+        printf("Enter Deadline (YYYY-MM-DD): ");
+        scanf("%s", deadline);
+        struct Task* newTask = createTask(id, name, priority, deadline);
+        if (addTask(&taskList, newTask)) {
+            printf("Task added successfully.\n");
+        } else {
+            printf("Failed to add task.\n");
         }
+        break;
+    }
+
+    case 2:
+        addUser(&userList);
+        break;
+
+    case 3: {
+        int resourceID;
+        char name[100];
+        printf("Enter Resource ID: ");
+        scanf("%d", &resourceID);
+        printf("Enter Resource Name: ");
+        scanf(" %[^\n]", name);
+
+        struct Resource* newResource = createResource(resourceID, name);
+        if (newResource != NULL) {
+            addResource(&resourceList, newResource);
+            printf("Resource added successfully.\n");
+        } else {
+            printf("Failed to create resource.\n");
+        }
+        break;
+    }
+
+    case 4: {
+        int taskID, userID;
+        printf("Enter Task ID: ");
+        scanf("%d", &taskID);
+        printf("Enter User ID: ");
+        scanf("%d", &userID);
+        if (assignUserToTask(&taskList, taskID, userID)) {
+            printf("User assigned to task.\n");
+        } else {
+            printf("Failed to assign user.\n");
+        }
+        break;
+    }
+
+    case 5: {
+        int taskID, dependencyID;
+        printf("Enter Task ID: ");
+        scanf("%d", &taskID);
+        printf("Enter Dependency Task ID: ");
+        scanf("%d", &dependencyID);
+        struct Task* task = findTask(&taskList, taskID);
+        if (task != NULL) {
+            task->dependencyTaskID = dependencyID;
+            printf("Dependency set.\n");
+        } else {
+            printf("Task not found.\n");
+        }
+        break;
+    }
+
+    case 6: {
+        int resourceID, taskID;
+        printf("Enter Resource ID: ");
+        scanf("%d", &resourceID);
+        printf("Enter Task ID to allocate: ");
+        scanf("%d", &taskID);
+        allocateResourceToTask(&resourceList, resourceID, taskID);
+        break;
+    }
+
+    case 7:
+        printAllTasks(&taskList);
+        break;
+
+    case 8:
+        viewUsers(&userList);
+        break;
+
+    case 9:
+        viewResources(resourceList);
+        break;
+
+    case 10: {
+        bool t = saveTasksToFile(&taskList, "tasks.txt");
+        bool u = saveUsersToFile(&userList, "users.txt");
+        bool r = saveResourcesToFile(&resourceList, "resources.txt");
+
+        if (t && u && r)
+            printf("All data saved successfully.\n");
+        else
+            printf("Some data failed to save.\n");
+        break;
+    }
+
+    case 11: {
+        bool t = loadTasksFromFile(&taskList, "tasks.txt");
+        bool u = loadUsersFromFile(&userList, "users.txt");
+        bool r = loadResourcesFromFile(&resourceList, "resources.txt");
+
+        if (t && u && r)
+            printf("All data loaded successfully.\n");
+        else
+            printf("Some data failed to load.\n");
+        break;
+    }
+
+    case 0:
+        setColor(10);
+        printf("\n\t\t\t\tExiting... Thank you!\n");
+        setColor(7);
+        break;
+
+    default:
+        setColor(12);
+        printf("\t\t\t\tInvalid choice! Please try again.\n");
+        setColor(7);
+        Sleep(1000);
+}
+
     } while (choice != 0);
 
     return 0;

@@ -65,3 +65,47 @@ struct User* findUserByID(struct UserList* list, int userID) {
     }
     return NULL; 
 }
+
+
+
+int saveUsersToFile(struct UserList* list, const char* filename) {
+    FILE* file = fopen(filename, "w");
+    if (!file) {
+        printf("Error opening file for writing.\n");
+        return 0;
+    }
+
+    struct User* current = list->head;
+    while (current != NULL) {
+        fprintf(file, "%d,%s,%d,%d\n", current->userID, current->name, current->tasksAssigned, current->tasksCompleted);
+        current = current->next;
+    }
+
+    fclose(file);
+    return 1;
+}
+
+
+int loadUsersFromFile(struct UserList* list, const char* filename) {
+    FILE* file = fopen(filename, "r");
+    if (!file) {
+        printf("Error opening file for reading.\n");
+        return 0;
+    }
+
+    // Clear existing list
+    list->head = NULL;
+
+    while (!feof(file)) {
+        struct User* newUser = (struct User*)malloc(sizeof(struct User));
+        if (fscanf(file, "%d,%99[^,],%d,%d\n", &newUser->userID, newUser->name, &newUser->tasksAssigned, &newUser->tasksCompleted) == 4) {
+            newUser->next = list->head;
+            list->head = newUser;
+        } else {
+            free(newUser); // clean up if the line is malformed
+        }
+    }
+
+    fclose(file);
+    return 1;
+}
