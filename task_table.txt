@@ -1,0 +1,5 @@
+ID    Task                 Assigned User        Priority   Resource        Depends On     
+----------------------------------------------------------------------------------------
+1111  Complete user.h and user.c files Mehmet               1          None            None           
+2222  Complete task.h and task.c files Unassigned           2          None            1111           
+3333  Complete resource.h and resource.c files Unassigned           1          None            2222           

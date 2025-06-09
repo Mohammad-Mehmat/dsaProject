@@ -1,22 +1,23 @@
 #pragma once
-
-struct User {
+# include <stdbool.h>
+typedef struct UserData{
     int userID;
     char name[100];
     int tasksAssigned;
     int tasksCompleted;
-    struct User* next;
-} ;
 
-struct UserList {
+} UserData;
 
-    struct User * head;
-} ;
+typedef struct User{
+    UserData data;
+    struct User * next;
+} User;
 
 // User-related function prototypes
-void addUser(struct UserList* list);
-void viewUsers(struct UserList* list);
-void inputUserData(struct User* newUser);
-struct User* findUserByID(struct UserList* list, int userID);
-int saveUsersToFile(struct UserList* list, const char* filename);
-int loadUsersFromFile(struct UserList* list, const char* filename);
+void addUser(User** user);
+void printUsers(User* user);
+void inputUserData(User* newUser);
+struct User* findUserByID(User* user, int userID);
+int saveUsersToFile(User* user, const char* filename);
+int loadUsersFromFile(User* user, const char* filename);
+bool isUserListEmpty(User * userHead);

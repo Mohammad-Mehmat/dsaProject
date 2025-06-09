@@ -1,5 +1,6 @@
 #pragma once
-
+#include "user.h"
+#include "resource.h"
 #include <stdbool.h>
 
 typedef enum {
@@ -9,7 +10,7 @@ typedef enum {
     BLOCKED
 } TaskStatus;
 
-struct Task {
+typedef struct TaskData {
     int taskID;
     char name[100];
     int priority;           // 1-10 (10 = highest)
@@ -18,34 +19,33 @@ struct Task {
     int assignedResourceID; // -1 if no resource
     int dependencyTaskID;   // -1 if no dependency
     TaskStatus status;
-    struct Task* next;
-};
+} TaskData;
 
-struct TaskList {
-    struct Task* head;
-    struct Task* tail;
-    int count;
-};
+typedef struct Task {
+    TaskData data;
+    struct Task* next;
+} Task;
 
 // Initialization
-void initTaskList(struct TaskList* list);
-void freeTaskList(struct TaskList* list);
+void initTask( Task* task);
+void freeTask( Task* task);
 
 // Core operations
-struct Task* createTask(int id, const char* name, int priority, const char* deadline);
-bool addTask(struct TaskList* list, struct Task* task);
-bool deleteTask(struct TaskList* list, int taskID);
-void printTask(const struct Task* task);
-void printAllTasks(const struct TaskList* list);
+void createTask (Task* newTask);
+void addTask( Task ** task);
+//bool deleteTask(struct Task* task, int taskID);
+void printTask( Task* task);
+void viewTasks( Task* task);
 
 // Assignment operations
-bool assignUserToTask(struct TaskList* list, int taskID, int userID);
-bool assignResourceToTask(struct TaskList* list, int taskID, int resourceID);
+int assignTaskToUser(Task *taskHead, User *userHead);
+bool allocateResourceToTask( Task* task, Resource *resourceHead);
 
-// Utility functions
-struct Task* findTask(const struct TaskList* list, int taskID);
+// // Utility functions
+// struct Task* findTask(const struct Task* task, int taskID);
 bool canAssignTask(const struct Task* task);
-bool isTaskComplete(const struct Task* task);
-bool saveTasksToFile(const struct TaskList* list, const char* filename);
-bool loadTasksFromFile(struct TaskList* list, const char* filename);
-
+// bool isTaskComplete(const struct Task* task);
+// bool saveTasksToFile(const struct Task* task, const char* filename);
+// bool loadTasksFromFile(struct Task* task, const char* filename);
+bool isTaskListEmpty(Task * taskHead);
+int setTaskDependency(Task *taskHead);

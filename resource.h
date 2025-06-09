@@ -1,20 +1,22 @@
 # pragma once
 #include <stdbool.h>
-struct Resource {
-    int resourceID;
-    char name[100];
-    int assignedTaskID;
-    struct Resource* next;
-} ;
 
- struct ResourceList {
-   struct Resource* head;
-};
+typedef struct ResourceData {
+  int resourceID;
+  char name[100];
+  int assignedTaskID;
+  struct Resource* next;
+}ResourceData ;
+
+ typedef struct Resource {
+  ResourceData data;
+   struct Resource* next;
+}Resource;
 
 // Resource-related function prototypes
-struct Resource* createResource(int resourceID, char name[]);
-void addResource(struct ResourceList* list, struct Resource* newResource);
-void allocateResourceToTask(struct ResourceList* list, int resourceID, int taskID);
-void viewResources(struct ResourceList list);
-bool saveResourcesToFile(struct ResourceList* list, const char* filename);
-bool loadResourcesFromFile(struct ResourceList* list, const char* filename);
+void inputResourceData(Resource* newResource);
+void addResource(Resource** resourceHead);
+void viewResources(Resource *resource);
+bool saveResourcesToFile(Resource* resource, const char* filename);
+bool loadResourcesFromFile(Resource* resource, const char* filename);
+bool isResourceListEmpty(Resource *resourceHead);
