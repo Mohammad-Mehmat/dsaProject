@@ -5,12 +5,11 @@ typedef struct ResourceData {
   int resourceID;
   char name[100];
   int assignedTaskID;
-  struct Resource* next;
 }ResourceData ;
 
  typedef struct Resource {
   ResourceData data;
-   struct Resource* next;
+  struct Resource* next;
 }Resource;
 
 // Resource-related function prototypes

@@ -21,6 +21,7 @@ void addUser( User **userHead ) {
             temp = temp->next;
         temp->next = newUser;
     }
+    
 }
 
 void inputUserData(User *newUser) {
@@ -37,8 +38,8 @@ void inputUserData(User *newUser) {
     newUser->data.tasksAssigned = 0;
     newUser->data.tasksCompleted = 0;
 }
-void printUsers( User *user) {
-    User* tempUser = user;
+void printUsers( User *userHead) {
+    User* tempUser = userHead;
 
     if (tempUser == NULL) {
        setColor(12);
@@ -48,22 +49,19 @@ void printUsers( User *user) {
     }
     setColor(10);
     printf("\n=== USER LIST ===\n");
-    setColor( 14);
-    printf("----------------------------------------\n");
-
-    while (tempUser->next != NULL) {
-        printf("User Name: %s\n", tempUser->data.name);
-        printf("User ID  : %d\n", tempUser->data.userID);
+        setColor( 14);
+    while (tempUser != NULL) {
+        setColor(14);
+        printf("\n----------------------------------------\n");
+        printf("User Name : %s\n", tempUser->data.name);
+        printf("User ID   : %d\n", tempUser->data.userID);
         printf("Assigned  : %d\n", tempUser->data.tasksAssigned);
         printf("Completed : %d\n", tempUser->data.tasksCompleted);
-        printf("----------------------------------------\n");
         tempUser = tempUser->next;
     }
+    free(tempUser);
+        
 }
-
-
-
-
 
 bool saveUsersToFile(User* userHead, FILE* fptr) {
      if (userHead ==NULL || fptr == NULL) {
@@ -79,10 +77,10 @@ bool saveUsersToFile(User* userHead, FILE* fptr) {
     }
 
     fclose(fptr);
+    free(current);
     return true;
 }
 
-// Load tasks from file
 bool loadUsersFromFile(User** userHead, FILE* fptr) {
 
     UserData newData;
@@ -99,7 +97,7 @@ bool loadUsersFromFile(User** userHead, FILE* fptr) {
         new_User->data = newData;
         new_User->next = NULL;
 
-        if(*userHead == NULL)    /// The list will be empty the first time
+        if(*userHead == NULL)   
         {
             *userHead = new_User;
             tempUser = *userHead;
@@ -116,6 +114,7 @@ bool loadUsersFromFile(User** userHead, FILE* fptr) {
         printf("Error: No users loaded from file.\n");
         return false;
     }
+    free(tempUser);
     return true;
 
 }

@@ -16,7 +16,7 @@ typedef struct User{
 
 // User-related function prototypes
 void addUser(User** user);
-void printUsers(User* user);
+void printUsers(User* userHead);
 void inputUserData(User* newUser);
 struct User* findUserByID(User* user, int userID);
 bool saveUsersToFile(User* userHead, FILE* fptr);

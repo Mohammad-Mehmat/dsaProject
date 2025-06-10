@@ -58,6 +58,7 @@ void viewResources(  Resource * resourceHead) {
         printf("----------------------------------------\n");
         tempResource = tempResource->next;
     }
+    free(tempResource);
 }
 bool saveResourcesToFile(Resource* resourceHead, FILE* fptr) {
      if (resourceHead ==NULL || fptr == NULL) {
@@ -73,6 +74,7 @@ bool saveResourcesToFile(Resource* resourceHead, FILE* fptr) {
     }
     
     fclose(fptr);
+    free(current);
     return true;
 }
 bool loadResourcesFromFile(Resource** resourceHead, FILE* fptr) {
@@ -108,6 +110,7 @@ bool loadResourcesFromFile(Resource** resourceHead, FILE* fptr) {
         printf("Error: No tasks loaded from file.\n");
         return false;
     }
+    free(tempResource);
     return true;
 
 }

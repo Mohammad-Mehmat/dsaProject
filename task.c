@@ -58,6 +58,7 @@ void addTask(Task** taskHead) {
         newTask->next = tempTask->next;
         tempTask->next = newTask;
     }
+    free(newTask); 
 }
 bool isTaskListEmpty(Task * taskHead)
 {
@@ -96,6 +97,8 @@ int setTaskDependency(Task *taskHead)
     } else {
         printf("Task not found.\n");
     }
+    free(tempTask);
+    free(dependencyTask);
 
     return 0;
 }
@@ -183,6 +186,8 @@ int assignTaskToUser(Task *taskHead, User *userHead) {
     } else {
        printf("Error: Task %d is already assigned to user %d.\n", taskID, tempTask->data.assignedUserID);
    }
+   free(tempTask);
+   free(tempUser);
    return 0;
 }
 
@@ -225,7 +230,8 @@ bool allocateResourceToTask(Task* taskHead, Resource *resourceHead) {
         printf("Resource Already Allocated to Task with ID %d\n", tempRsource->data.assignedTaskID);
         return false;
     }
-    
+    free(tempTask);
+    free(tempRsource);
     return true;
 }
 
@@ -242,6 +248,7 @@ bool saveTasksToFile(Task* taskHead, FILE* fptr) {
         current = current ->next;
     }
     fclose(fptr);
+    free(current);
     return true;
 }
 
@@ -279,6 +286,70 @@ bool loadTasksFromFile(Task** taskHead, FILE* fptr) {
         printf("Error: No tasks loaded from file.\n");
         return false;
     }
+    free(tempTask);
     return true;
 
+}
+bool TaskCompleted(Task* taskHead, Resource* resourceHead, User* userHead) {
+    if (isTaskListEmpty(taskHead) || isResourceListEmpty(resourceHead) || isUserListEmpty(userHead)) {
+        setColor(4);
+        printf("Error: One of the lists is empty.\n");
+        return false;
+    }
+
+    int taskID;
+    printf("Enter Task ID to mark as completed: ");
+    scanf("%d", &taskID);
+
+    Task* tempTask = taskHead;
+    Resource* tempResource = resourceHead;
+    User* tempUser = userHead;
+    while (tempTask != NULL && tempTask->data.taskID != taskID) {
+        tempTask = tempTask->next;
+    }
+
+    if (tempTask == NULL) {
+        printf("Error: Task with ID %d not found.\n", taskID);
+        return false;
+    }
+    if (tempTask->data.assignedUserID == -1) {
+        printf("Error: Task %d is not assigned to any user.\n", taskID);
+        return false;
+    }
+    if (tempTask->data.status == COMPLETED) {
+        printf("Error: Task %d is already completed.\n", taskID);
+        return true;
+    }
+    if (tempTask->data.status == BLOCKED) {
+        printf("Error: Task %d is blocked and cannot be marked as completed.\n", taskID);
+        return false;
+    }
+    while (tempResource != NULL && tempResource->data.assignedTaskID != taskID) {
+        tempResource = tempResource->next;
+    }
+
+    if (tempResource == NULL) {
+        printf("Error: Resource associated with Task ID %d not found.\n", taskID);
+        return false;
+    }
+    while (tempUser != NULL && tempUser->data.userID != tempTask->data.assignedUserID) {
+        tempUser = tempUser->next;
+    }
+
+    if (tempUser == NULL) {
+        printf("Error: User with ID %d not found.\n", tempTask->data.assignedUserID);
+        return false;
+    }
+
+    tempTask->data.status = COMPLETED;
+    tempResource->data.assignedTaskID = -1;
+    tempUser->data.tasksCompleted++;
+
+    setColor(2); 
+    printf("Task %d marked as completed.\n", taskID);
+    setColor(14);
+    free(tempResource);
+    free(tempTask);
+    free(tempUser);
+    return true;
 }

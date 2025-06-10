@@ -51,3 +51,4 @@ bool isTaskListEmpty(Task * taskHead);
 int setTaskDependency(Task *taskHead);
 
 extern void setColor(int color);
+bool TaskCompleted(Task* taskHead, Resource* resourceHead, User* userHead);

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <windows.h> // For colors and Sleep()
+#include <windows.h> 
 
 #include "task.h"
 #include "user.h"
@@ -9,7 +9,9 @@
 void setColor(int color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
-
+void ClearScreen(){
+    system("cls");
+}
 void loading() {
     printf("\nLoading");
     for (int i = 0; i < 5; i++) {
@@ -22,13 +24,13 @@ void loading() {
 
 void displayMenu() {
     
-    setColor(11); // Cyan
+    setColor(11); 
 
     printf("\t\t\t\t ============================================\n");
     printf("    \t\t\t\t |    TASK & RESOURCE MANAGEMENT SYSTEM     |\n");
     printf("\t\t\t\t ============================================ \n");
 
-    setColor(14); // Yellow
+    setColor(14); 
     printf("\t\t\t\t | 1. Add New Task                          |\n");
     printf("\t\t\t\t | 2. Add New User                          |\n");
     printf("\t\t\t\t | 3. Add New Resource                      |\n");
@@ -40,6 +42,8 @@ void displayMenu() {
     printf("\t\t\t\t | 9. View All Resources                    |\n");
     printf("\t\t\t\t | 10. Save Data to File                    |\n");
     printf("\t\t\t\t | 11. Load Data from File                  |\n");
+    printf("\t\t\t\t | 12. Mark Task as Completed               |\n");
+    printf("\t\t\t\t | 12. Clear All Previous Outputs           |\n");
     printf("\t\t\t\t | 0. Exit                                  |\n");
 
     setColor(10); 
@@ -50,11 +54,10 @@ void displayMenu() {
 int main() {
     int choice;
 
-    // Initialize your lists
     Task *taskHead = NULL;
     User *userHead = NULL;
     Resource *resourceHead = NULL;
-    loading(); // Display loading animation once
+    loading(); 
 
     do {
         displayMenu();
@@ -166,11 +169,13 @@ int main() {
             printf("Some data failed to load.\n");
         break;
     }
-    // case 12: {
-    //     printAndSaveTaskTable(&taskHead, &userHead, "task_table.txt");
-    //     break;
-    // }
-
+    case 12: {
+        TaskCompleted(taskHead, resourceHead, userHead);
+        break;
+    }
+    case 13:
+        ClearScreen();
+        break;
     case 0:
         setColor(10);
         printf("\n\t\t\t\tExiting... Thank you!\n");
