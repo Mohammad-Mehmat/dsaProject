@@ -40,69 +40,12 @@ void displayMenu() {
     printf("\t\t\t\t | 9. View All Resources                    |\n");
     printf("\t\t\t\t | 10. Save Data to File                    |\n");
     printf("\t\t\t\t | 11. Load Data from File                  |\n");
-    printf("\t\t\t\t | 12. Print and Save Task Table            |\n");
     printf("\t\t\t\t | 0. Exit                                  |\n");
 
     setColor(10); 
     printf("\nEnter your choice: ");
     setColor(7);
 }
-// void printAndSaveTaskTable(struct TaskList* taskList, struct UserList* userList, const char* filename) {
-//     FILE* file = fopen(filename, "w");
-//     if (!file) {
-//         printf("Error opening file for writing.\n");
-//         return;
-//     }
-
-//     struct Task* current = taskList->head;
-
-//     printf("\n%-5s %-20s %-20s %-10s %-15s %-15s\n", "ID", "Task", "Assigned User", "Priority", "Resource", "Depends On");
-//     printf("----------------------------------------------------------------------------------------\n");
-//     fprintf(file, "%-5s %-20s %-20s %-10s %-15s %-15s\n", "ID", "Task", "Assigned User", "Priority", "Resource", "Depends On");
-//     fprintf(file, "----------------------------------------------------------------------------------------\n");
-
-//     while (current) {
-//         char* userName = "Unassigned";
-//         struct User* user = findUserByID(userList, current->assignedUserID);
-//         if (user) {
-//             userName = user->name;
-//         }
-
-//         char resourceStr[20];
-//         if (current->assignedResourceID != -1)
-//             sprintf(resourceStr, "%d", current->assignedResourceID);
-//         else
-//             strcpy(resourceStr, "None");
-
-//         char dependencyStr[20];
-//         if (current->dependencyTaskID != -1)
-//             sprintf(dependencyStr, "%d", current->dependencyTaskID);
-//         else
-//             strcpy(dependencyStr, "None");
-
-//         printf("%-5d %-20s %-20s %-10d %-15s %-15s\n",
-//                current->taskID,
-//                current->name,
-//                userName,
-//                current->priority,
-//                resourceStr,
-//                dependencyStr);
-
-//         fprintf(file, "%-5d %-20s %-20s %-10d %-15s %-15s\n",
-//                 current->taskID,
-//                 current->name,
-//                 userName,
-//                 current->priority,
-//                 resourceStr,
-//                 dependencyStr);
-
-//         current = current->next;
-//     }
-
-//     fclose(file);
-//     printf("\nTask table saved to %s successfully.\n", filename);
-// }
-
 
 int main() {
     int choice;
