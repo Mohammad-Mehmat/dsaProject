@@ -67,6 +67,7 @@ bool saveUsersToFile(User* userHead, FILE* fptr) {
         current = current ->next;
     }
 
+    fclose(fptr);
     return true;
 }
 

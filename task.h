@@ -32,7 +32,7 @@ void initTask( Task* task);
 void freeTask( Task* task);
 
 // Core operations
-void createTask (Task* newTask);
+void inputTaskData (Task* newTask);
 void addTask( Task ** task);
 //bool deleteTask(struct Task* task, int taskID);
 void printTask( Task* task);

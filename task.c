@@ -261,7 +261,7 @@ bool saveTasksToFile(Task* taskHead, FILE* fptr) {
         fwrite(&(current->data), sizeof(TaskData), 1, fptr);
         current = current ->next;
     }
-
+    fclose(fptr);
     return 0;
 }
 

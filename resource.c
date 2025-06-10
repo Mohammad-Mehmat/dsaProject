@@ -65,7 +65,8 @@ bool saveResourcesToFile(Resource* resourceHead, FILE* fptr) {
         fwrite(&(current->data), sizeof(ResourceData), 1, fptr);
         current = current ->next;
     }
-
+    
+    fclose(fptr);
     return 0;
 }
 
