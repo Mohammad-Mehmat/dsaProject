@@ -1,6 +1,6 @@
 # pragma once
 #include <stdbool.h>
-
+#include <stdio.h>
 typedef struct ResourceData {
   int resourceID;
   char name[100];
@@ -17,6 +17,6 @@ typedef struct ResourceData {
 void inputResourceData(Resource* newResource);
 void addResource(Resource** resourceHead);
 void viewResources(Resource *resource);
-bool saveResourcesToFile(Resource* resource, const char* filename);
-bool loadResourcesFromFile(Resource* resource, const char* filename);
+bool saveResourcesToFile(Resource* resourceHead, FILE *fptr);
+bool loadResourcesFromFile(Resource** resourceHead, FILE *fptr);
 bool isResourceListEmpty(Resource *resourceHead);

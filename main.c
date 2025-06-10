@@ -168,29 +168,65 @@ int main() {
         viewResources(resourceHead);
         break;
 
-    // case 10: {
-    //     bool t = saveTasksToFile(&taskHead, "tasks.txt");
-    //     bool u = saveUsersToFile(&userHead, "users.txt");
-    //     bool r = saveResourcesToFile(&resourceHead, "resources.txt");
+    case 10: {
+        FILE* fptrTask = fopen("tasks.txt", "wb");
+        if (fptrTask == NULL) {
+            printf("\nCannot open file for saving Tasks!!\n\n");
+            break;
+        }
+        bool t = saveTasksToFile(taskHead, fptrTask);
+        FILE* fptrUser = fopen("users.txt", "wb");
+        if (fptrUser == NULL) {
+            printf("\nCannot open file for saving Users!!\n\n");
+            break;
+        }
+        bool u = saveUsersToFile(userHead, fptrUser);
+        FILE* fptrResource = fopen("resources.txt", "wb");
+        if (fptrResource == NULL) {
+            printf("\nCannot open file for saving Resources!!\n\n");
+            break;
+        }
+        bool r = saveResourcesToFile(resourceHead, fptrResource);
 
-    //     if (t && u && r)
-    //         printf("All data saved successfully.\n");
-    //     else
-    //         printf("Some data failed to save.\n");
-    //     break;
-    // }
+        if (t && u && r)
+            printf("All data saved successfully.\n");
+        else
+            printf("Some data failed to save.\n");
+        break;
+    }
 
-    // case 11: {
-    //     bool t = loadTasksFromFile(&taskHead, "tasks.txt");
-    //     bool u = loadUsersFromFile(&userHead, "users.txt");
-    //     bool r = loadResourcesFromFile(&resourceHead, "resources.txt");
+    case 11: {
 
-    //     if (t && u && r)
-    //         printf("All data loaded successfully.\n");
-    //     else
-    //         printf("Some data failed to load.\n");
-    //     break;
-    // }
+        FILE* fptrTask = fopen("tasks.txt", "rb");
+        if (fptrTask == NULL)
+            {
+                printf("\nCannot open file for loading Tasks!!\n\n");
+                break;
+            }
+        bool t = loadTasksFromFile(&taskHead, fptrTask);
+
+        FILE * fptrUser = fopen("users.txt", "rb");
+        if (fptrUser == NULL)
+            {
+                printf("\nCannot open file for loading Users!!\n\n");
+                break;
+            }
+       bool u = loadUsersFromFile(&userHead, fptrUser);
+
+        FILE *fptrResource = fopen("resources.txt", "rb");
+        if (fptrResource == NULL)
+            {
+                printf("\nCannot open file for loading Resources!!\n\n");
+                break;
+            }
+        bool r = loadResourcesFromFile(&resourceHead, fptrResource);
+
+         if (t /*&& u && r*/)
+            printf("All data loaded successfully.\n");
+        else
+            printf("Some data failed to load.\n");
+        break;
+    }
     // case 12: {
     //     printAndSaveTaskTable(&taskHead, &userHead, "task_table.txt");
     //     break;

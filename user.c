@@ -51,60 +51,63 @@ void printUsers( User *user) {
 }
 
 
-// struct User* findUserByID(struct User* user, int userID) {
-//     struct User* current = user->next;
-//     while (current != NULL) {
-//         if (current->userID == userID) {
-//             return current; 
-//         }
-//         current = current->next;
-//     }
-//     return NULL; 
-// }
 
 
 
-// int saveUsersToFile(struct User* user, const char* filename) {
-//     FILE* file = fopen(filename, "w");
-//     if (!file) {
-//         printf("Error opening file for writing.\n");
-//         return 0;
-//     }
+bool saveUsersToFile(User* userHead, FILE* fptr) {
+     if (userHead ==NULL || fptr == NULL) {
+        printf("\nError :  Null pointer");
+        return false;
+    }
 
-//     struct User* current = user->next;
-//     while (current != NULL) {
-//         fprintf(file, "%d,%s,%d,%d\n", current->userID, current->name, current->tasksAssigned, current->tasksCompleted);
-//         current = current->next;
-//     }
+    User* current = userHead;
+    while (current != NULL ) {
+        
+        fwrite(&(current->data), sizeof(UserData), 1, fptr);
+        current = current ->next;
+    }
 
-//     fclose(file);
-//     return 1;
-// }
+    return true;
+}
 
+// Load tasks from file
+bool loadUsersFromFile(User** userHead, FILE* fptr) {
 
-// int loadUsersFromFile(struct User* user, const char* filename) {
-//     FILE* file = fopen(filename, "r");
-//     if (!file) {
-//         printf("Error opening file for reading.\n");
-//         return 0;
-//     }
+    UserData newData;
+    User * tempUser = *userHead;
 
-//     // Clear existing user
-//     user->next = NULL;
+    if (fptr == NULL || userHead == NULL) {
+        printf("Error: Pointer is Null \n");
+        return false;
+    }
 
-//     while (!feof(file)) {
-//         struct User* newUser = (struct User*)malloc(sizeof(struct User));
-//         if (fscanf(file, "%d,%99[^,],%d,%d\n", &newUser->userID, newUser->name, &newUser->tasksAssigned, &newUser->tasksCompleted) == 4) {
-//             newUser->next = user->next;
-//             user->next = newUser;
-//         } else {
-//             free(newUser); // clean up if the line is malformed
-//         }
-//     }
+     while (fread (&newData, sizeof(UserData), 1, fptr)) {
+        User * new_User = (User *) malloc(sizeof(User));
 
-//     fclose(file);
-//     return 1;
-// }
+        new_User->data = newData;
+        new_User->next = NULL;
+
+        if(*userHead == NULL)    /// The list will be empty the first time
+        {
+            *userHead = new_User;
+            tempUser = *userHead;
+        }
+        else
+        {
+            tempUser->next = new_User;
+            tempUser = tempUser->next;
+        }
+
+    }
+    fclose(fptr);
+    if (tempUser == NULL) {
+        printf("Error: No users loaded from file.\n");
+        return false;
+    }
+    return true;
+
+}
+
 
 bool isUserListEmpty(User * userHead)
 {

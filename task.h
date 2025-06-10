@@ -2,6 +2,7 @@
 #include "user.h"
 #include "resource.h"
 #include <stdbool.h>
+#include <stdio.h>
 
 typedef enum {
     PENDING,
@@ -42,10 +43,9 @@ int assignTaskToUser(Task *taskHead, User *userHead);
 bool allocateResourceToTask( Task* task, Resource *resourceHead);
 
 // // Utility functions
-// struct Task* findTask(const struct Task* task, int taskID);
 bool canAssignTask(const struct Task* task);
 // bool isTaskComplete(const struct Task* task);
-// bool saveTasksToFile(const struct Task* task, const char* filename);
-// bool loadTasksFromFile(struct Task* task, const char* filename);
+bool saveTasksToFile( Task* taskHead, FILE* fptr);
+bool loadTasksFromFile(Task** taskHead, FILE* fptr);
 bool isTaskListEmpty(Task * taskHead);
 int setTaskDependency(Task *taskHead);

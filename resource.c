@@ -53,51 +53,59 @@ void viewResources(  Resource * resourceHead) {
         tempResource = tempResource->next;
     }
 }
+bool saveResourcesToFile(Resource* resourceHead, FILE* fptr) {
+     if (resourceHead ==NULL || fptr == NULL) {
+        printf("\nError :  Null pointer");
+        return-1;
+    }
+    
+    Resource* current = resourceHead ;
+    while (current != NULL ) {
+        
+        fwrite(&(current->data), sizeof(ResourceData), 1, fptr);
+        current = current ->next;
+    }
 
-// bool loadResourcesFromFile(  Resource* list, const char* filename) {
-//     FILE* file = fopen(filename, "r");
-//     if (file == NULL) {
-//         printf("Failed to open file for loading.\n");
-//         return false;
-//     }
+    return 0;
+}
 
-//     char line[256];
-//     while (fgets(line, sizeof(line), file)) {
-//         int resourceID, assignedTaskID;
-//         char name[100];
+// Load tasks from file
+bool loadResourcesFromFile(Resource** resourceHead, FILE* fptr) {
 
-//         if (sscanf(line, "%d,%99[^,],%d", &resourceID, name, &assignedTaskID) == 3) {
-//               Resource* res = createResource(resourceID, name);
-//             if (res != NULL) {
-//                 res->assignedTaskID = assignedTaskID;
-//                 addResource(list, res);
-//             }
-//         }
-//     }
+    ResourceData newData;
+    Resource * tempResource = *resourceHead;
 
-//     fclose(file);
-//     printf("Resources loaded from file successfully.\n");
-//     return true;
-// }
+    if (fptr == NULL || resourceHead == NULL) {
+        printf("Error: Pointer is Null \n");
+        return false;
+    }
 
+     while (fread (&newData, sizeof(ResourceData), 1, fptr)) {
+        Resource * new_Resource = (Resource *) malloc(sizeof(Resource));
 
-// bool saveResourcesToFile(  Resource* list, const char* filename) {
-//     FILE* file = fopen(filename, "w");
-//     if (file == NULL) {
-//         printf("Failed to open file for saving.\n");
-//         return false;
-//     }
+        new_Resource->data = newData;
+        new_Resource->next = NULL;
 
-//       Resource* current = list->head;
-//     while (current != NULL) {
-//         fprintf(file, "%d,%s,%d\n", current->resourceID, current->name, current->assignedTaskID);
-//         current = current->next;
-//     }
+        if(*resourceHead == NULL)    /// The list will be empty the first time
+        {
+            *resourceHead = new_Resource;
+            tempResource = *resourceHead;
+        }
+        else
+        {
+            tempResource->next = new_Resource;
+            tempResource = tempResource->next;
+        }
 
-//     fclose(file);
-//     printf("Resources saved to file successfully.\n");
-//     return true;
-// }
+    }
+    fclose(fptr);
+    if (tempResource == NULL) {
+        printf("Error: No tasks loaded from file.\n");
+        return false;
+    }
+    return true;
+
+}
 
 bool isResourceListEmpty(Resource *resourceHead)
 {

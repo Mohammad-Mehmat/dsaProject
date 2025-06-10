@@ -1,5 +1,6 @@
 #pragma once
 # include <stdbool.h>
+#include <stdio.h>
 typedef struct UserData{
     int userID;
     char name[100];
@@ -18,6 +19,6 @@ void addUser(User** user);
 void printUsers(User* user);
 void inputUserData(User* newUser);
 struct User* findUserByID(User* user, int userID);
-int saveUsersToFile(User* user, const char* filename);
-int loadUsersFromFile(User* user, const char* filename);
+bool saveUsersToFile(User* userHead, FILE* fptr);
+bool loadUsersFromFile(User** userHead, FILE* fptr);
 bool isUserListEmpty(User * userHead);

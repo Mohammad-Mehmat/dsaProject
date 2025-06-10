@@ -7,25 +7,8 @@
 #include <string.h>
 #include <ctype.h>
 
-// Initialize task list
-// void initTaskList(struct TaskList* list) {
-//     list->head = list->tail = NULL;
-//     list->count = 0;
-// }
 
-// // Free all tasks in list
-// void freeTaskList(struct TaskList* list) {
-//     struct Task* current = list->head;
-//     while (current) {
-//         struct Task* next = current->next;
-//         free(current);
-//         current = next;
-//     }
-//     list->head = list->tail = NULL;
-//     list->count = 0;
-// }
 
-// Create new task
 void inputTaskData(Task* task) {
     if (!task) return;
 
@@ -92,7 +75,7 @@ int setTaskDependency(Task *taskHead)
     }
     if (tempTask != NULL) {
         tempTask->data.dependencyTaskID = dependencyID;
-        printf("Dependency set.\n");
+        tempTask->data.status = BLOCKED; 
     } else {
         printf("Task not found.\n");
     }
@@ -127,13 +110,20 @@ int setTaskDependency(Task *taskHead)
 void printTask( Task* task) {
     if (!task) return;
 
-    const char* statusStr[] = {"Pending", "In Progress", "Completed", "Blocked"};
     
     printf("\nTask ID: %d\n", task->data.taskID);
     printf("Name: %s\n", task->data.name);
     printf("Priority: %d\n", task->data.priority);
     printf("Deadline: %s\n", task->data.deadline);
-    printf("Status: %s\n", statusStr[task->data.status]);
+    if(task->data.status == PENDING) {
+        printf("Status: PENDING\n");
+    } else if(task->data.status == IN_PROGRESS) {
+        printf("Status: IN_PROGRESS\n");
+    } else if(task->data.status == COMPLETED) {
+        printf("Status: COMPLETED\n");
+    } else {
+        printf("Status: BLOCKED\n");
+    }
     printf("Assigned User: %d\n", task->data.assignedUserID);
     printf("Assigned Resource: %d\n", task->data.assignedResourceID);
     printf("Depends On: %d\n", task->data.dependencyTaskID);
@@ -164,6 +154,7 @@ int assignTaskToUser(Task *taskHead, User *userHead) {
         printf("Error: Users do not exist.\n");
         return 0;
     }
+
     int taskID, userID;
     printf("Enter Task ID: ");
     scanf("%d", &taskID);
@@ -186,12 +177,16 @@ int assignTaskToUser(Task *taskHead, User *userHead) {
         printf("Error: User with ID %d not found.\n", userID);
         return 0;
     }
-    
-    tempTask->data.assignedUserID = userID;
-    tempTask->data.status = IN_PROGRESS; 
-    tempUser->data.tasksAssigned++;
-    printf("User %d assigned to task %d successfully.\n", userID, taskID);
-    return 1;
+    if (tempTask->data.assignedUserID == -1) {
+         tempTask->data.assignedUserID = userID;
+        tempTask->data.status = IN_PROGRESS; 
+        tempUser->data.tasksAssigned++;
+        printf("User %d assigned to task %d successfully.\n", userID, taskID);
+        return 1;
+    } else {
+       printf("Error: Task %d is already assigned to user %d.\n", taskID, tempTask->data.assignedUserID);
+   }
+   return 0;
 }
 
 
@@ -227,12 +222,12 @@ bool allocateResourceToTask(Task* taskHead, Resource *resourceHead) {
         printf("Error: Resource with ID %d not found.\n", resourceID);
         return false;
     }
-    if (tempRsource->data.assignedTaskID==-1){
+    if (tempRsource->data.assignedTaskID == -1){
         tempTask->data.assignedResourceID = resourceID;
         tempRsource->data.assignedTaskID = tempTask->data.taskID;
         printf("Resource %d allocated to task %d successfully.\n", resourceID, taskID);
     } else {
-        printf("Resource Already Allocated to Task with ID %d/n", resourceHead->data.assignedTaskID);
+        printf("Resource Already Allocated to Task with ID %d\n", resourceHead->data.assignedTaskID);
         return false;
     }
     
@@ -253,82 +248,57 @@ bool allocateResourceToTask(Task* taskHead, Resource *resourceHead) {
 //     return task && task->status == COMPLETED;
 // }
 
-// // Save tasks to file
-// bool saveTasksToFile(const struct TaskList* list, const char* filename) {
-//     if (!list || !filename) return false;
+// Save tasks to file
+bool saveTasksToFile(Task* taskHead, FILE* fptr) {
+     if (taskHead ==NULL || fptr == NULL) {
+        printf("\nError :  Null pointer");
+        return-1;
+    }
+    
+    Task* current = taskHead ;
+    while (current != NULL ) {
+        
+        fwrite(&(current->data), sizeof(TaskData), 1, fptr);
+        current = current ->next;
+    }
 
-//     FILE* file = fopen(filename, "w");
-//     if (!file) return false;
+    return 0;
+}
 
-//     struct Task* current = list->head;
-//     while (current) {
-//         fprintf(file, "%d,%s,%d,%s,%d,%d,%d,%d\n",
-//                 current->taskID,
-//                 current->name,
-//                 current->priority,
-//                 current->deadline,
-//                 current->assignedUserID,
-//                 current->assignedResourceID,
-//                 current->dependencyTaskID,
-//                 current->status);
-//         current = current->next;
-//     }
+// Load tasks from file
+bool loadTasksFromFile(Task** taskHead, FILE* fptr) {
 
-//     fclose(file);
-//     return true;
-// }
+    TaskData newData;
+    Task * tempTask = *taskHead;
 
-// // Load tasks from file
-// bool loadTasksFromFile(struct TaskList* list, const char* filename) {
-//     if (!list || !filename) return false;
+    if (fptr == NULL || taskHead == NULL) {
+        printf("Error: Pointer is Null \n");
+        return false;
+    }
 
-//     FILE* file = fopen(filename, "r");
-//     if (!file) return false;
+     while (fread (&newData, sizeof(TaskData), 1, fptr)) {
+        Task * new_Task = (Task *) malloc(sizeof(Task));
 
-//     char line[256];
-//     while (fgets(line, sizeof(line), file)) {
-//         struct Task task;
-//         int status;
-//         if (sscanf(line, "%d,%99[^,],%d,%10[^,],%d,%d,%d,%d",
-//                    &task.taskID,
-//                    task.name,
-//                    &task.priority,
-//                    task.deadline,
-//                    &task.assignedUserID,
-//                    &task.assignedResourceID,
-//                    &task.dependencyTaskID,
-//                    &status) == 8) {
-//             task.status = (TaskStatus)status;
-//             struct Task* newTask = createTask(task.taskID, task.name, task.priority, task.deadline);
-//             if (newTask) {
-//                 newTask->assignedUserID = task.assignedUserID;
-//                 newTask->assignedResourceID = task.assignedResourceID;
-//                 newTask->dependencyTaskID = task.dependencyTaskID;
-//                 newTask->status = task.status;
-//                 addTask(list, newTask);
-//             }
-//         }
-//     }
+        new_Task->data = newData;
+        new_Task->next = NULL;
 
-//     fclose(file);
-//     return true;
-// }
+        if(*taskHead == NULL)    /// The list will be empty the first time
+        {
+            *taskHead = new_Task;
+            tempTask = *taskHead;
+        }
+        else
+        {
+            tempTask->next = new_Task;
+            tempTask = tempTask->next;
+        }
 
-// int setTaskDependency(struct Task* taskHead, int taskID, int dependencyID) {
-//     struct Task* task = taskHead;
-//     while (task != NULL && task->taskID != taskID)
-//         task = task->next;
+    }
+    fclose(fptr);
+    if (tempTask == NULL) {
+        printf("Error: No tasks loaded from file.\n");
+        return false;
+    }
+    return true;
 
-//     if (task == NULL)
-//         return 0; // Task not found
-
-//     struct Task* dependency = taskHead;
-//     while (dependency != NULL && dependency->taskID != dependencyID)
-//         dependency = dependency->next;
-
-//     if (dependency == NULL)
-//         return 0; // Dependency task not found
-
-//     task->dependencyTaskID = dependency;
-//     return 1; // Success
-// }
+}
