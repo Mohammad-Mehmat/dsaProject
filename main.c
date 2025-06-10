@@ -111,10 +111,9 @@ int main() {
     int choice;
 
     // Initialize your lists
-    Task *taskHead = {NULL};
-    User *userHead = {NULL};
-    Resource *resourceHead = {NULL};
-
+    Task *taskHead = NULL;
+    User *userHead = NULL;
+    Resource *resourceHead = NULL;
     loading(); // Display loading animation once
 
     do {

@@ -56,7 +56,7 @@ void viewResources(  Resource * resourceHead) {
 bool saveResourcesToFile(Resource* resourceHead, FILE* fptr) {
      if (resourceHead ==NULL || fptr == NULL) {
         printf("\nError :  Null pointer");
-        return-1;
+        return false;
     }
     
     Resource* current = resourceHead ;
@@ -67,7 +67,7 @@ bool saveResourcesToFile(Resource* resourceHead, FILE* fptr) {
     }
     
     fclose(fptr);
-    return 0;
+    return true;
 }
 
 // Load tasks from file
@@ -81,7 +81,7 @@ bool loadResourcesFromFile(Resource** resourceHead, FILE* fptr) {
         return false;
     }
 
-     while (fread (&newData, sizeof(ResourceData), 1, fptr)) {
+    while (fread (&newData, sizeof(ResourceData), 1, fptr)) {
         Resource * new_Resource = (Resource *) malloc(sizeof(Resource));
 
         new_Resource->data = newData;

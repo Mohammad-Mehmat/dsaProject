@@ -68,10 +68,18 @@ int setTaskDependency(Task *taskHead)
     scanf("%d", &taskID);
     printf("Enter Dependency Task ID: ");
     scanf("%d", &dependencyID);
-
+    
     Task *tempTask = taskHead;
     while (tempTask != NULL && tempTask->data.taskID != taskID) {
         tempTask = tempTask->next;
+    }
+    Task *dependencyTask = taskHead;
+    while (dependencyTask != NULL && dependencyTask->data.taskID != dependencyID) {
+        dependencyTask = dependencyTask->next;
+    }
+    if (dependencyTask == NULL) {
+        printf("Error: Dependency task with ID %d not found.\n", dependencyID);
+        return 0;
     }
     if (tempTask != NULL) {
         tempTask->data.dependencyTaskID = dependencyID;
@@ -227,7 +235,7 @@ bool allocateResourceToTask(Task* taskHead, Resource *resourceHead) {
         tempRsource->data.assignedTaskID = tempTask->data.taskID;
         printf("Resource %d allocated to task %d successfully.\n", resourceID, taskID);
     } else {
-        printf("Resource Already Allocated to Task with ID %d\n", resourceHead->data.assignedTaskID);
+        printf("Resource Already Allocated to Task with ID %d\n", tempRsource->data.assignedTaskID);
         return false;
     }
     
@@ -252,7 +260,7 @@ bool allocateResourceToTask(Task* taskHead, Resource *resourceHead) {
 bool saveTasksToFile(Task* taskHead, FILE* fptr) {
      if (taskHead ==NULL || fptr == NULL) {
         printf("\nError :  Null pointer");
-        return-1;
+        return false;
     }
     
     Task* current = taskHead ;
@@ -262,7 +270,7 @@ bool saveTasksToFile(Task* taskHead, FILE* fptr) {
         current = current ->next;
     }
     fclose(fptr);
-    return 0;
+    return true;
 }
 
 // Load tasks from file
