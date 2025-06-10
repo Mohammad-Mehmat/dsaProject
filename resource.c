@@ -3,7 +3,6 @@
 #include <string.h>
 #include "resource.h"
 
-// Create a new resource
 void inputResourceData(Resource* newResource) {
 
     printf("Enter Resource ID: ");
@@ -14,7 +13,6 @@ void inputResourceData(Resource* newResource) {
    
 }
 
-// Add a resource to the list
 void addResource( Resource** resourceHead) {
     Resource* newResource = (Resource*)malloc(sizeof(Resource));
     if (newResource == NULL) {
@@ -36,7 +34,6 @@ void addResource( Resource** resourceHead) {
 }
 
 
-//View all resources
 void viewResources(  Resource * resourceHead) {
       Resource* tempResource = resourceHead;
     if (tempResource == NULL) {
@@ -69,8 +66,6 @@ bool saveResourcesToFile(Resource* resourceHead, FILE* fptr) {
     fclose(fptr);
     return true;
 }
-
-// Load tasks from file
 bool loadResourcesFromFile(Resource** resourceHead, FILE* fptr) {
 
     ResourceData newData;

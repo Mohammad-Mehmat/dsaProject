@@ -6,12 +6,10 @@
 #include "user.h"
 #include "resource.h"
 
-// Set console text color
 void setColor(int color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
 
-// Simple loading animation
 void loading() {
     printf("\nLoading");
     for (int i = 0; i < 5; i++) {
@@ -22,7 +20,6 @@ void loading() {
     Sleep(500);
 }
 
-// Fancy menu display
 void displayMenu() {
     
     setColor(11); // Cyan
@@ -220,7 +217,7 @@ int main() {
             }
         bool r = loadResourcesFromFile(&resourceHead, fptrResource);
 
-         if (t /*&& u && r*/)
+         if (t && u && r)
             printf("All data loaded successfully.\n");
         else
             printf("Some data failed to load.\n");

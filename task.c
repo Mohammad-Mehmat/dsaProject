@@ -31,7 +31,7 @@ void inputTaskData(Task* task) {
 
 }
 
-// Add task to list (O(1) operation)
+
 void addTask(Task** taskHead) {
      Task * newTask = (Task *) malloc (sizeof ( Task)) ;
     if (!newTask) {
@@ -44,11 +44,15 @@ void addTask(Task** taskHead) {
 
     if (isTaskListEmpty(*taskHead)) {
         *taskHead = newTask;
+    } else if ((newTask->data.priority >= (*taskHead)->data.priority)) {
+        newTask->next = *taskHead;
+        *taskHead = newTask;
     } else {
-        Task* temp = *taskHead;
-        while (temp->next != NULL)
-            temp = temp->next;
-        temp->next = newTask;
+        Task* tempTask = *taskHead;
+        while (tempTask->next != NULL && tempTask->next->data.priority >= newTask->data.priority)
+            tempTask = tempTask->next;
+        newTask->next = tempTask->next;
+        tempTask->next = newTask;
     }
 }
 bool isTaskListEmpty(Task * taskHead)
@@ -90,31 +94,7 @@ int setTaskDependency(Task *taskHead)
     return 0;
 }
 
-// Delete task from list
-// bool deleteTask(struct TaskList* list, int taskID) {
-//     if (!list || !list->head) return false;
 
-//     struct Task *current = list->head, *prev = NULL;
-    
-//     // Find task to delete
-//     while (current && current->taskID != taskID) {
-//         prev = current;
-//         current = current->next;
-//     }
-
-//     if (!current) return false; // Not found
-
-//     // Update list pointers
-//     if (current == list->head) list->head = current->next;
-//     if (current == list->tail) list->tail = prev;
-//     if (prev) prev->next = current->next;
-
-//     free(current);
-//     list->count--;
-//     return true;
-// }
-
-// Print task details
 void printTask( Task* task) {
     if (!task) return;
 
@@ -137,7 +117,6 @@ void printTask( Task* task) {
     printf("Depends On: %d\n", task->data.dependencyTaskID);
 }
 
-// Print all tasks
 void viewTasks(Task* task) {
     if (!task) return;
 
@@ -149,11 +128,11 @@ void viewTasks(Task* task) {
     printf("=== END OF LIST ===\n");
 }
 
-// Assign user to task
+
 int assignTaskToUser(Task *taskHead, User *userHead) {
     Task *tempTask = taskHead;
     User *tempUser = userHead;
-    // Checking if task and user lists exist
+
     if (tempTask == NULL) {
         printf("Error: Tasks do not exist.\n");
         return 0;
@@ -169,7 +148,7 @@ int assignTaskToUser(Task *taskHead, User *userHead) {
     printf("Enter User ID: ");
     scanf("%d", &userID);
 
-    // Find the task
+
     while (tempTask != NULL && tempTask->data.taskID != taskID) {
         tempTask = tempTask->next;
     }
@@ -177,7 +156,7 @@ int assignTaskToUser(Task *taskHead, User *userHead) {
         printf("Error: Task with ID %d not found.\n", taskID);
         return 0;
     }
-    // Find the user
+
     while (tempUser != NULL && tempUser->data.userID != userID) {
         tempUser = tempUser->next;
     }
@@ -197,8 +176,6 @@ int assignTaskToUser(Task *taskHead, User *userHead) {
    return 0;
 }
 
-
-// Assign resource to task
 bool allocateResourceToTask(Task* taskHead, Resource *resourceHead) {
     Task *tempTask = taskHead;
     Resource *tempRsource = resourceHead;
@@ -242,21 +219,6 @@ bool allocateResourceToTask(Task* taskHead, Resource *resourceHead) {
     return true;
 }
 
-
-
-// // Check if task can be assigned
-// bool canAssignTask(Task* task) {
-//     return task && 
-//            task->data.assignedResourceID != -1 && 
-//            task->data.dependencyTaskID == -1;
-// }
-
-// // Check if task is complete
-// bool isTaskComplete(const struct Task* task) {
-//     return task && task->status == COMPLETED;
-// }
-
-// Save tasks to file
 bool saveTasksToFile(Task* taskHead, FILE* fptr) {
      if (taskHead ==NULL || fptr == NULL) {
         printf("\nError :  Null pointer");
@@ -273,7 +235,7 @@ bool saveTasksToFile(Task* taskHead, FILE* fptr) {
     return true;
 }
 
-// Load tasks from file
+
 bool loadTasksFromFile(Task** taskHead, FILE* fptr) {
 
     TaskData newData;
@@ -290,7 +252,7 @@ bool loadTasksFromFile(Task** taskHead, FILE* fptr) {
         new_Task->data = newData;
         new_Task->next = NULL;
 
-        if(*taskHead == NULL)    /// The list will be empty the first time
+        if(*taskHead == NULL)    
         {
             *taskHead = new_Task;
             tempTask = *taskHead;
