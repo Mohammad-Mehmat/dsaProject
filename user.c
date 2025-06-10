@@ -24,29 +24,40 @@ void addUser( User **userHead ) {
 }
 
 void inputUserData(User *newUser) {
-    printf("Enter the name of the user: ");
+    setColor(11);
+    printf("\n+++ New User +++\n");
+    setColor( 14);
+
+    printf("Name: ");
     scanf(" %[^\n]", newUser->data.name);
-    printf("Enter the ID of the user: ");
-    scanf("%d", &newUser->data.userID); 
+
+    printf("ID: ");
+    scanf("%d", &newUser->data.userID);
+
     newUser->data.tasksAssigned = 0;
-    newUser->data.tasksCompleted = 0; 
+    newUser->data.tasksCompleted = 0;
 }
 void printUsers( User *user) {
-    User* temp = user;
+    User* tempUser = user;
 
-    if (temp == NULL) {
+    if (tempUser == NULL) {
+       setColor(12);
         printf("No users found.\n");
+        setColor( 14);
         return;
     }
+    setColor(10);
+    printf("\n=== USER LIST ===\n");
+    setColor( 14);
+    printf("----------------------------------------\n");
 
-    printf("\n--- User user ---\n");
-    while (temp != NULL) {
-        printf("Name     : %s\n", temp->data.name);
-        printf("User ID  : %d\n", temp->data.userID);
-        printf("Task Assigned : %d\n", temp->data.tasksAssigned);
-        printf("Task Completed: %d\n", temp->data.tasksCompleted);
-        printf("---------------------\n");
-        temp = temp->next;
+    while (tempUser->next != NULL) {
+        printf("User Name: %s\n", tempUser->data.name);
+        printf("User ID  : %d\n", tempUser->data.userID);
+        printf("Assigned  : %d\n", tempUser->data.tasksAssigned);
+        printf("Completed : %d\n", tempUser->data.tasksCompleted);
+        printf("----------------------------------------\n");
+        tempUser = tempUser->next;
     }
 }
 

@@ -4,13 +4,17 @@
 #include "resource.h"
 
 void inputResourceData(Resource* newResource) {
+    
+    setColor(11);
+    printf("\n+++ New Resource +++\n");
+    setColor( 14);
 
-    printf("Enter Resource ID: ");
+    printf("ID: ");
     scanf("%d", &newResource->data.resourceID);
-    printf("Enter Resource Name: ");
+
+    printf("Name: ");
     scanf(" %[^\n]", newResource->data.name);
-    newResource->data.assignedTaskID = -1; // -1 means not assigned
-   
+    newResource->data.assignedTaskID = -1;
 }
 
 void addResource( Resource** resourceHead) {
@@ -37,16 +41,21 @@ void addResource( Resource** resourceHead) {
 void viewResources(  Resource * resourceHead) {
       Resource* tempResource = resourceHead;
     if (tempResource == NULL) {
+         setColor(12);
         printf("No resources available.\n");
+        setColor( 14);
         return;
     }
+    setColor(10);
+    printf("\n=== RESOURCES LIST ===\n");
+    setColor( 14);
+    printf("----------------------------------------\n");
 
-    printf("\nAvailable Resources:\n");
     while (tempResource != NULL) {
-        printf("Resource ID: %d\n", tempResource->data.resourceID);
-        printf("Name: %s\n", tempResource->data.name);
+        printf("Resource Name: %s\n", tempResource->data.name);
+        printf("Resource ID : %d\n", tempResource->data.resourceID);
         printf("Assigned Task ID: %d\n", tempResource->data.assignedTaskID);
-        printf("--------------------------\n");
+        printf("----------------------------------------\n");
         tempResource = tempResource->next;
     }
 }

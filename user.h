@@ -22,3 +22,4 @@ struct User* findUserByID(User* user, int userID);
 bool saveUsersToFile(User* userHead, FILE* fptr);
 bool loadUsersFromFile(User** userHead, FILE* fptr);
 bool isUserListEmpty(User * userHead);
+extern void setColor(int color);

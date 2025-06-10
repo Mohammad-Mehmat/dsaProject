@@ -49,3 +49,5 @@ bool saveTasksToFile( Task* taskHead, FILE* fptr);
 bool loadTasksFromFile(Task** taskHead, FILE* fptr);
 bool isTaskListEmpty(Task * taskHead);
 int setTaskDependency(Task *taskHead);
+
+extern void setColor(int color);

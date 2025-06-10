@@ -20,3 +20,5 @@ void viewResources(Resource *resource);
 bool saveResourcesToFile(Resource* resourceHead, FILE *fptr);
 bool loadResourcesFromFile(Resource** resourceHead, FILE *fptr);
 bool isResourceListEmpty(Resource *resourceHead);
+
+extern void setColor(int color);

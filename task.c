@@ -10,24 +10,28 @@
 
 
 void inputTaskData(Task* task) {
-    if (!task) return;
+    if (task == NULL) return;
 
-    printf("Enter Task ID: ");
+    setColor(11);
+    printf("\n+++ Enter Task Details +++\n");
+    setColor( 14);
+
+    printf("ID: ");
     scanf("%d", &task->data.taskID);
 
-    printf("Enter Task Name: ");
+    printf("Name: ");
     scanf(" %[^\n]", task->data.name);
 
-    printf("Enter Task Priority (1-10): ");
+    printf("Priority (1-10): ");
     scanf("%d", &task->data.priority);
 
-    printf("Enter Task Deadline: ");
+    printf("Deadline: ");
     scanf(" %[^\n]", task->data.deadline);
+
     task->data.assignedUserID = -1;
     task->data.assignedResourceID = -1;
     task->data.dependencyTaskID = -1;
     task->data.status = PENDING;
-    task->next = NULL;
 
 }
 
@@ -63,12 +67,13 @@ bool isTaskListEmpty(Task * taskHead)
 int setTaskDependency(Task *taskHead)
 {
     if (isTaskListEmpty(taskHead)) {
+        setColor(4);
         printf("Error: Task list is empty.\n");
         return 0;
     }
 
     int taskID, dependencyID;
-    printf("Enter Task ID of the Task that depends on the other Tassk: ");
+    printf("Enter Task ID of the Task that depends on the other Task: ");
     scanf("%d", &taskID);
     printf("Enter Dependency Task ID: ");
     scanf("%d", &dependencyID);
@@ -91,30 +96,34 @@ int setTaskDependency(Task *taskHead)
     } else {
         printf("Task not found.\n");
     }
+
     return 0;
 }
 
 
 void printTask( Task* task) {
-    if (!task) return;
+    if (task==NULL) 
+        return;
 
-    
-    printf("\nTask ID: %d\n", task->data.taskID);
-    printf("Name: %s\n", task->data.name);
-    printf("Priority: %d\n", task->data.priority);
-    printf("Deadline: %s\n", task->data.deadline);
+    setColor(10); 
+    printf("\nTask ID   :%d: \n Task Name  :%s\n", task->data.taskID, task->data.name);
+    setColor( 14);
+    printf(" Priority   : %d\n", task->data.priority);
+    printf(" Deadline   : %s\n", task->data.deadline);
+
     if(task->data.status == PENDING) {
-        printf("Status: PENDING\n");
+        printf("Status   : PENDING\n");
     } else if(task->data.status == IN_PROGRESS) {
-        printf("Status: IN_PROGRESS\n");
+        printf("Status   : IN_PROGRESS\n");
     } else if(task->data.status == COMPLETED) {
-        printf("Status: COMPLETED\n");
+        printf("Status   : COMPLETED\n");
     } else {
-        printf("Status: BLOCKED\n");
+        printf("Status   : BLOCKED\n");
     }
-    printf("Assigned User: %d\n", task->data.assignedUserID);
-    printf("Assigned Resource: %d\n", task->data.assignedResourceID);
-    printf("Depends On: %d\n", task->data.dependencyTaskID);
+    printf(" Assigned User     : %d\n", task->data.assignedUserID);
+    printf(" Assigned Resource : %d\n", task->data.assignedResourceID);
+    printf(" Depends On        : %d\n", task->data.dependencyTaskID);
+    printf("----------------------------------------\n");
 }
 
 void viewTasks(Task* task) {
@@ -125,6 +134,7 @@ void viewTasks(Task* task) {
         printTask(task);
         task = task->next;
     }
+    setColor(7);
     printf("=== END OF LIST ===\n");
 }
 
