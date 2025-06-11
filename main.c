@@ -43,7 +43,7 @@ void displayMenu() {
     printf("\t\t\t\t | 10. Save Data to File                    |\n");
     printf("\t\t\t\t | 11. Load Data from File                  |\n");
     printf("\t\t\t\t | 12. Mark Task as Completed               |\n");
-    printf("\t\t\t\t | 12. Clear All Previous Outputs           |\n");
+    printf("\t\t\t\t | 13. Clear All Previous Outputs           |\n");
     printf("\t\t\t\t | 0. Exit                                  |\n");
 
     setColor(10); 
