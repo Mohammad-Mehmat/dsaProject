@@ -97,8 +97,8 @@ int setTaskDependency(Task *taskHead)
     } else {
         printf("Task not found.\n");
     }
-    free(tempTask);
-    free(dependencyTask);
+     
+   
 
     return 0;
 }
@@ -186,8 +186,8 @@ int assignTaskToUser(Task *taskHead, User *userHead) {
     } else {
        printf("Error: Task %d is already assigned to user %d.\n", taskID, tempTask->data.assignedUserID);
    }
-   free(tempTask);
-   free(tempUser);
+    
+    
    return 0;
 }
 
@@ -230,8 +230,8 @@ bool allocateResourceToTask(Task* taskHead, Resource *resourceHead) {
         printf("Resource Already Allocated to Task with ID %d\n", tempRsource->data.assignedTaskID);
         return false;
     }
-    free(tempTask);
-    free(tempRsource);
+     
+    
     return true;
 }
 
@@ -248,7 +248,7 @@ bool saveTasksToFile(Task* taskHead, FILE* fptr) {
         current = current ->next;
     }
     fclose(fptr);
-    free(current);
+     
     return true;
 }
 
@@ -286,7 +286,7 @@ bool loadTasksFromFile(Task** taskHead, FILE* fptr) {
         printf("Error: No tasks loaded from file.\n");
         return false;
     }
-    free(tempTask);
+     
     return true;
 
 }
@@ -348,8 +348,8 @@ bool TaskCompleted(Task* taskHead, Resource* resourceHead, User* userHead) {
     setColor(2); 
     printf("Task %d marked as completed.\n", taskID);
     setColor(14);
-    free(tempResource);
-    free(tempTask);
-    free(tempUser);
+     
+     
+     
     return true;
 }

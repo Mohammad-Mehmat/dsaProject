@@ -24,7 +24,7 @@ typedef struct TaskData {
 
 typedef struct Task {
     TaskData data;
-    struct Task* next;
+    struct Task* next; 
 } Task;
 
 // Initialization

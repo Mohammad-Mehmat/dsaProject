@@ -59,7 +59,7 @@ void printUsers( User *userHead) {
         printf("Completed : %d\n", tempUser->data.tasksCompleted);
         tempUser = tempUser->next;
     }
-    free(tempUser);
+     
         
 }
 
@@ -77,7 +77,7 @@ bool saveUsersToFile(User* userHead, FILE* fptr) {
     }
 
     fclose(fptr);
-    free(current);
+     
     return true;
 }
 
@@ -114,7 +114,7 @@ bool loadUsersFromFile(User** userHead, FILE* fptr) {
         printf("Error: No users loaded from file.\n");
         return false;
     }
-    free(tempUser);
+     
     return true;
 
 }
